@@ -9,6 +9,10 @@
     bufio.scanner  used to read the data line by line words by words fom input source like file or standar inputs 
 
 #  format verbs 
+# need ?? 
+fmt.Printf("Hello %s, your age is %d\n", name, age)
+
+
     format verbs are the placeholder that specifies/ tells how the value should be displayed in the progrma and it starts witht he % [percent]
     Some example 
     %d decimal 
@@ -29,4 +33,5 @@
 
 # way 2 
     using the io/ioutiil 
+    
     need the file name and file name can be taken by os.Args[0] 
