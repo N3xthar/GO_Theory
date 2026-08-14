@@ -146,6 +146,8 @@ This negative-counter trick is a favorite "explain RWMutex internals" staff-inte
 ## 9.4 Memory Synchronization
 
 ### Definition
+Memory synchronization is the process of making sure that when one goroutine changes some data, other goroutines can see those changes correctly and in the proper order.
+
 Even with correct locking, CPU caches, compiler reordering, and memory visibility can cause a goroutine to not "see" another's writes without a proper **happens-before** relationship. Synchronization primitives establish this ordering guarantee — not just mutual exclusion, but *visibility*.
 
 ### Real-world example
@@ -239,6 +241,13 @@ This is the textbook correct **double-checked locking** pattern — the fast pat
 ## 9.6 The Race Detector
 
 ### Definition
+
+Race Detector Go ka ek tool hai jo program run karte time check karta hai ki multiple goroutines same data ko unsafe way mein access toh nahi kar rahi hain.
+
+other way 
+
+Go ka Race Detector hume batata hai ki hamare code mein data race ho rahi hai ya nahi."
+
 Go's `-race` flag instruments memory accesses to detect data races dynamically at runtime, reporting exactly which goroutines/lines raced on which variable.
 
 ### Real-world usage
@@ -278,6 +287,17 @@ This is why it's **dynamic, not static**: it only catches races on code paths *a
 ## 9.7 Example: Concurrent Non-Blocking Cache
 
 ### Definition / Pattern
+    
+    This pattern stores frequently requested data in a cache and ensures that when many requests ask for the same missing data at the same time, only one request performs the expensive work and the others share its result
+
+    Cache = "already kaam ho chuka hai, result rakha hai."
+
+    Singleflight = "kaam already chal raha hai, doosre same kaam ko mat chalao."
+
+#     Singleflight — Simple Definition
+
+    Singleflight is a pattern where, if multiple goroutines request the same data at the same time, only one goroutine performs the actual work, while the others wait and share the same result.
+
 A cache where `Get`/`Set` for different keys don't block each other, and duplicate concurrent requests for the same missing key don't trigger redundant work — memoization + request deduplication (also called "singleflight" pattern in Go's ecosystem, `golang.org/x/sync/singleflight` is the production-grade version of this).
 
 ### Real-world example
